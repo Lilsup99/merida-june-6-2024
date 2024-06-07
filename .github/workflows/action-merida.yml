@@ -30,7 +30,6 @@ jobs:
 
       - name: crear tablas por pais
         run: |
-          grep -i Germany companies-all.csv  > companies_germany.csv
           grep -i Kingdom companies-all.csv  > companies_united_kingdom.csv
           grep -i France companies-all.csv  > companies_france.csv
 
