@@ -6,12 +6,22 @@ on:
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
+
+  
   analizando_datos:
     permissions:
       contents: write
 
     runs-on: ubuntu-latest
     steps:
+
+      - name: descargar data
+        run: |
+          curl -sL "https://companiesmarketcap.com/video-games/largest-video-game-companies-by-market-cap/?download=csv" -o companies-all.csv
+          if [ ! -s companies-all.csv ]; then
+            echo "Downloaded CSV file is empty"
+            exit 1
+          fi
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -38,20 +48,20 @@ jobs:
           git diff --cached --exit-code || git commit -m "tabla actualizada" --allow-empty
           git push --force-with-lease origin HEAD:main
  
-  viendo_eu: # nombre del job
-    needs: analizando_datos # job(s) de los que depende
-    runs-on: macos-12 # sistema operativo
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # viendo_eu: # nombre del job
+  #   needs: analizando_datos # job(s) de los que depende
+  #   runs-on: macos-12 # sistema operativo
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: imprimir tabla bruta y neta
-        run: |
-          echo "tabla desde Empresas Francesas"
-          cat companies_france.csv
-          echo
-          echo "tabla desde Empresas Germanas"
-          cat companies_germany.csv
+  #     - name: imprimir tabla bruta y neta
+  #       run: |
+  #         echo "tabla desde Empresas Francesas"
+  #         cat companies_france.csv
+  #         echo
+  #         echo "tabla desde Empresas Germanas"
+  #         cat companies_germany.csv
 
   viendo_uk: # nombre del job
     needs: analizando_datos # job(s) de los que depende
